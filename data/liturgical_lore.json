@@ -1,0 +1,41 @@
+[
+  {
+    "lore_id": "LC-001",
+    "submitted_at": "2026-11-17T07:00:00Z",
+    "scribe_or_order": "Cantor Aurelian of the First Watch",
+    "title": "Canticle of the Unbroken Vigil",
+    "liturgical_category": "Canticle_Or_Hymn",
+    "canonical_hour_or_season": "Vigils",
+    "commune_house_or_choir": "Choir of the First Watch",
+    "epigraph_or_antiphon": "Keep the wick trimmed though the salt-marsh forgets the dawn.",
+    "lore_body": "Chanted three hours before daybreak across the terraced cloisters of Othello. Twelve cantors stand in alternating bronze stalls so that no breath of silence interrupts the psalmody between shifts. Tradition holds that if the Canticle ever falters mid-stanza, the Commune must extinguish every hearth until the next new moon and eat only cold barley bread.",
+    "cross_references": "Rule of Hours I.4; Choir of the First Watch Charter",
+    "synod_status": "Canonized"
+  },
+  {
+    "lore_id": "LC-002",
+    "submitted_at": "2026-11-17T07:05:00Z",
+    "scribe_or_order": "Stewardess Mara of the Common Table",
+    "title": "Precept of the Shared Salt & Silence",
+    "liturgical_category": "Canon_Precept",
+    "canonical_hour_or_season": "Sext",
+    "commune_house_or_choir": "House of the Common Table",
+    "epigraph_or_antiphon": "One loaf, one ledger, one iron spoon for abbot and novice alike.",
+    "lore_body": "At midday Sext, every tool in the granaries, scriptoria, and vineyards is laid aside. Residents gather at long stone refectory slabs where salt cellars are passed hand to hand without spoken names. Grievances may only be inscribed on wax tablets placed beside the Steward's bowl and read aloud at Vespers after anger has cooled.",
+    "cross_references": "Communal Charter II.9; LC-001",
+    "synod_status": "Canonized"
+  },
+  {
+    "lore_id": "LC-003",
+    "submitted_at": "2026-11-17T07:10:00Z",
+    "scribe_or_order": "Brother Cassian, Bell-Founder",
+    "title": "Reliquary of the Cinder-Bell",
+    "liturgical_category": "Relic_Or_Vestment",
+    "canonical_hour_or_season": "Vespers",
+    "commune_house_or_choir": "Order of Bell-Founders",
+    "epigraph_or_antiphon": "What burned in the foundry still tolls when fog rises from the basin.",
+    "lore_body": "Cast from slag recovered after the Great Bellhouse Fire of the Third Synod, the Cinder-Bell hangs in a recessed ash-wood shrine rather than the main belfry. When struck with a horn mallet, it emits no clear note but a low percussive tremor felt in the sternum. Novices whisper that its iron contains melted seal-rings of excommunicated elders.",
+    "cross_references": "Third Synod Chronicle; LC-001",
+    "synod_status": "Pending_Synod"
+  }
+]

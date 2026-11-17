@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Othello — Scriptorium of the Ash-Ink</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="canonical-watch-strip" class="watch-strip" aria-label="Canonical Hour Watch"></div>
+
+  <div class="page-shell">
+    <header class="site-header">
+      <div class="brand">
+        <img
+          class="emblem"
+          src="assets/commune-emblem.jpg"
+          alt="Othello Liturgical Commune Emblem"
+          onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='../assets/commune-emblem.jpg';}"
+        />
+        <div>
+          <p class="brand-eyebrow">The Liturgical Commune</p>
+          <h1 class="brand-title">Othello — Scriptorium of the Ash-Ink</h1>
+          <p class="brand-subtitle">Venetian Senate garrison service Under the King (0xCROWN_WARRANT_OTHELLO_SCRIPTORIUM) &mdash; canticles, precepts, relics, and apocrypha.</p>
+        </div>
+      </div>
+      <nav class="nav-actions" aria-label="Primary Actions">
+        <a class="btn btn-primary" href="./form.html">Submit New Lore</a>
+        <a id="native-form-link" class="btn btn-subtle" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">Native Google Form</a>
+        <button type="button" id="header-sync-btn" class="btn btn-subtle">Sync Sheet</button>
+      </nav>
+    </header>
+
+    <div id="inline-banner" class="inline-banner" role="status" aria-live="polite">
+      <div class="inline-banner-body">
+        <p id="inline-banner-title" class="inline-banner-title"></p>
+        <p id="inline-banner-text" class="inline-banner-text"></p>
+      </div>
+      <button type="button" class="inline-banner-close" aria-label="Dismiss notice" onclick="dismissBanner()">&times;</button>
+    </div>
+
+    <div class="codex-nav-wrap">
+      <nav class="codex-nav" role="tablist" aria-label="Codex Chapters">
+        <button type="button" class="codex-tab is-active" data-chapter="anthology" role="tab" aria-selected="true">
+          Anthology <span id="count-anthology" class="tab-count">0</span>
+        </button>
+        <button type="button" class="codex-tab" data-chapter="charter" role="tab" aria-selected="false">
+          Charter &amp; Rule
+        </button>
+        <button type="button" class="codex-tab" data-chapter="hours" role="tab" aria-selected="false">
+          Rule of Hours <span id="count-hours" class="tab-count">9</span>
+        </button>
+        <button type="button" class="codex-tab" data-chapter="orders" role="tab" aria-selected="false">
+          Orders &amp; Houses <span id="count-orders" class="tab-count">5</span>
+        </button>
+        <button type="button" class="codex-tab" data-chapter="personae" role="tab" aria-selected="false">
+          Dramatis Personae <span id="count-personae" class="tab-count">5</span>
+        </button>
+        <button type="button" class="codex-tab" data-chapter="atlas" role="tab" aria-selected="false">
+          Suite Atlas <span id="count-atlas" class="tab-count">0</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- CHAPTER 1: ANTHOLOGY -->
+    <section id="panel-anthology" class="chapter-panel is-active" aria-label="Liturgical Lore Anthology">
+      <section class="stats-grid" aria-label="Commune Archive Summary">
+        <div class="stat-card">
+          <div class="stat-label">Total Lore Entries</div>
+          <div id="stat-total" class="stat-value">0</div>
+          <div id="stat-source-note" class="stat-sub">Compiled archive</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Canonized</div>
+          <div id="stat-canonized" class="stat-value">0</div>
+          <div class="stat-sub">Ratified into Tab III</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pending Synod</div>
+          <div id="stat-pending" class="stat-value">0</div>
+          <div class="stat-sub">Awaiting reading at Lauds</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Houses &amp; Dispositions</div>
+          <div id="stat-orders" class="stat-value">5</div>
+          <div id="stat-disputed-note" class="stat-sub">Orders under Rule of Hours</div>
+        </div>
+      </section>
+
+      <section class="filter-panel" aria-label="Filter Lore Anthology">
+        <div class="field-group">
+          <label class="field-label" for="filter-search">Search Title, Epigraph, Scribe, or Text</label>
+          <input id="filter-search" type="search" placeholder="Search LC-001, Cinder-Bell, Vigils..." />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="filter-category">Liturgical Category</label>
+          <select id="filter-category">
+            <option value="">All Categories</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="filter-hour">Canonical Hour / Season</label>
+          <select id="filter-hour">
+            <option value="">All Hours &amp; Seasons</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="filter-status">Synod Status</label>
+          <select id="filter-status">
+            <option value="">All Dispositions</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="filter-sort">Sort Order</label>
+          <select id="filter-sort">
+            <option value="id-asc">Lore ID (LC-001 &uarr;)</option>
+            <option value="id-desc">Lore ID (Newest &darr;)</option>
+            <option value="submitted-desc">Submitted (Recent)</option>
+            <option value="hour-order">Rule of Hours</option>
+          </select>
+        </div>
+      </section>
+
+      <div class="toolbar-row">
+        <div>
+          <h2>Liturgical Lore Anthology</h2>
+          <span id="results-count" class="section-meta">Loading archive...</span>
+        </div>
+        <div class="toolbar-actions">
+          <button type="button" id="reset-filters-btn" class="btn btn-subtle btn-sm" style="display:none;">Reset Filters</button>
+          <button type="button" id="anthology-export-btn" class="btn btn-subtle btn-sm" style="display:none;">Export JSON</button>
+          <div class="view-toggle" role="group" aria-label="Anthology View Mode">
+            <button type="button" id="view-cards-btn" class="is-active">Cards</button>
+            <button type="button" id="view-ledger-btn">Ledger</button>
+          </div>
+        </div>
+      </div>
+
+      <section id="lore-container" aria-live="polite"></section>
+    </section>
+
+    <!-- CHAPTER 2: CHARTER & RULE -->
+    <section id="panel-charter" class="chapter-panel" aria-label="World Charter and Liturgical Commune Rule">
+      <div class="warrant-callout">
+        <div>
+          <p class="brand-eyebrow" style="margin-bottom:0.2rem;">Chartered Garrison Mandate</p>
+          <div style="font-weight:600;color:var(--text);">Venetian Senate Garrison Service Under the King</div>
+        </div>
+        <div class="nav-actions">
+          <span class="warrant-code">0xCROWN_WARRANT_OTHELLO_SCRIPTORIUM</span>
+          <button type="button" class="btn btn-subtle btn-sm" data-jump-chapter="hours">Explore Rule of Hours</button>
+          <button type="button" class="btn btn-subtle btn-sm" data-jump-chapter="orders">View Five Orders</button>
+        </div>
+      </div>
+      <div id="charter-grid" class="codex-grid"></div>
+    </section>
+
+    <!-- CHAPTER 3: RULE OF HOURS -->
+    <section id="panel-hours" class="chapter-panel" aria-label="Canonical Hours and Liturgical Seasons">
+      <div class="toolbar-row">
+        <div>
+          <h2>The Six Canonical Hours &amp; Three Seasons</h2>
+          <span class="section-meta">Synchronized with Commune Registry &amp; Chronicle</span>
+        </div>
+      </div>
+      <div id="hours-grid" class="hours-grid"></div>
+    </section>
+
+    <!-- CHAPTER 4: ORDERS & HOUSES -->
+    <section id="panel-orders" class="chapter-panel" aria-label="The Five Houses and Orders">
+      <div class="toolbar-row">
+        <div>
+          <h2>The Five Houses &amp; Orders</h2>
+          <span class="section-meta">Governing vows, cloister seats, and liturgical emblems</span>
+        </div>
+      </div>
+      <div id="orders-grid" class="orders-grid"></div>
+    </section>
+
+    <!-- CHAPTER 5: DRAMATIS PERSONAE -->
+    <section id="panel-personae" class="chapter-panel" aria-label="Dramatis Personae">
+      <div class="toolbar-row">
+        <div>
+          <h2>Dramatis Personae of the Commune</h2>
+          <span class="section-meta">Public virtues &amp; sealed schisms under wax lock</span>
+        </div>
+      </div>
+      <div id="personae-grid" class="personae-grid"></div>
+    </section>
+
+    <!-- CHAPTER 6: SUITE ATLAS -->
+    <section id="panel-atlas" class="chapter-panel" aria-label="Google Suite and Scriptorium Atlas">
+      <div class="toolbar-row">
+        <div>
+          <h2>Google Suite &amp; Scriptorium Atlas</h2>
+          <span class="section-meta">Synchronized Cloud &amp; GitHub Destinations</span>
+        </div>
+      </div>
+      <div id="atlas-grid" class="atlas-grid"></div>
+    </section>
+  </div>
+
+  <!-- Folio Reader Modal -->
+  <div id="folio-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="folio-modal-title">
+    <div class="modal-dialog">
+      <div class="modal-head">
+        <div>
+          <div id="folio-modal-meta" class="lore-id-group" style="margin-bottom:0.45rem;"></div>
+          <h2 id="folio-modal-title" style="margin:0;color:var(--amber);font-size:1.45rem;"></h2>
+        </div>
+        <button type="button" id="close-folio-modal" class="modal-close" aria-label="Close folio">&times;</button>
+      </div>
+      <div id="folio-modal-body"></div>
+    </div>
+  </div>
+
+  <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+
+  <script src="./lore-data.js"></script>
+  <script src="./scriptorium-core.js"></script>
+  <script>
+    (function () {
+      const S = window.OthelloScriptorium;
+      const suiteConfig = S.getSuite();
+      const codex = S.getCodex();
+
+      const searchInput = document.getElementById("filter-search");
+      const categorySelect = document.getElementById("filter-category");
+      const hourSelect = document.getElementById("filter-hour");
+      const statusSelect = document.getElementById("filter-status");
+      const sortSelect = document.getElementById("filter-sort");
+      const resetFiltersBtn = document.getElementById("reset-filters-btn");
+      const exportJsonBtn = document.getElementById("anthology-export-btn");
+      const viewCardsBtn = document.getElementById("view-cards-btn");
+      const viewLedgerBtn = document.getElementById("view-ledger-btn");
+      const loreContainer = document.getElementById("lore-container");
+      const resultsCount = document.getElementById("results-count");
+      const folioModal = document.getElementById("folio-modal");
+
+      let activeChapter = "anthology";
+      let viewMode = "cards";
+      let openFolioId = null;
+
+      S.initCanonicalWatch("canonical-watch-strip");
+      S.bindWaxSealDelegation(document.body);
+
+      const nativeFormUrl = S.getNativeFormUrl();
+      const nativeFormLink = document.getElementById("native-form-link");
+      if (nativeFormUrl && nativeFormLink) {
+        nativeFormLink.href = S.safeHref(nativeFormUrl);
+        nativeFormLink.style.display = "inline-flex";
+      }
+
+      document.getElementById("header-sync-btn").addEventListener("click", function () {
+        if (!S.getConfiguredWebhookUrl()) {
+          S.openSettingsModal();
+          return;
+        }
+        S.fetchRemoteLore(false).then(function (res) {
+          if (res.ok) {
+            S.showToast("Archive Synced", "Loaded " + res.entries.length + " entries from Google Sheets.", "success");
+          }
+        });
+      });
+
+      if (exportJsonBtn) {
+        exportJsonBtn.addEventListener("click", S.exportCompiledLoreJson);
+      }
+
+      function populateFilterOptions() {
+        const entries = S.getMergedEntries();
+        const prevCat = categorySelect.value;
+        const prevHour = hourSelect.value;
+        const prevStatus = statusSelect.value;
+
+        categorySelect.innerHTML = '<option value="">All Categories</option>';
+        hourSelect.innerHTML = '<option value="">All Hours &amp; Seasons</option>';
+        statusSelect.innerHTML = '<option value="">All Dispositions</option>';
+
+        const cats = Object.keys(S.CATEGORY_META);
+        entries.forEach(function (e) {
+          if (e.liturgical_category && cats.indexOf(e.liturgical_category) === -1) {
+            cats.push(e.liturgical_category);
+          }
+        });
+        cats.forEach(function (val) {
+          const opt = document.createElement("option");
+          opt.value = val;
+          opt.textContent = S.formatCategoryLabel(val);
+          categorySelect.appendChild(opt);
+        });
+
+        const hours = S.HOUR_ORDER.slice();
+        entries.forEach(function (e) {
+          if (e.canonical_hour_or_season && hours.indexOf(e.canonical_hour_or_season) === -1) {
+            hours.push(e.canonical_hour_or_season);
+          }
+        });
+        hours.forEach(function (val) {
+          const opt = document.createElement("option");
+          opt.value = val;
+          opt.textContent = S.formatHourLabel(val);
+          hourSelect.appendChild(opt);
+        });
+
+        S.ALLOWED_STATUSES.forEach(function (val) {
+          const opt = document.createElement("option");
+          opt.value = val;
+          opt.textContent = S.formatStatusLabel(val);
+          statusSelect.appendChild(opt);
+        });
+
+        categorySelect.value = prevCat;
+        hourSelect.value = prevHour;
+        statusSelect.value = prevStatus;
+      }
+
+      function populateStats() {
+        const data = S.getMergedEntriesWithMeta();
+        const entries = data.entries;
+        const sources = data.sources;
+
+        let canonized = 0;
+        let pending = 0;
+        let disputedOrSealed = 0;
+        let stagedCount = 0;
+        let remoteCount = 0;
+        const houses = new Set((codex.orders || []).map(function (o) { return o.Name; }));
+
+        entries.forEach(function (e) {
+          if (e.synod_status === "Canonized") canonized += 1;
+          if (e.synod_status === "Pending_Synod") pending += 1;
+          if (e.synod_status === "Disputed" || e.synod_status === "Sealed_Apocrypha") disputedOrSealed += 1;
+          if ((e.commune_house_or_choir || "").trim()) houses.add(e.commune_house_or_choir.trim());
+          const src = sources.get(e.lore_id);
+          if (src === "staged") stagedCount += 1;
+          if (src === "remote") remoteCount += 1;
+        });
+
+        document.getElementById("stat-total").textContent = String(entries.length);
+        document.getElementById("stat-canonized").textContent = String(canonized);
+        document.getElementById("stat-pending").textContent = String(pending);
+        document.getElementById("stat-orders").textContent = String(houses.size);
+        document.getElementById("count-anthology").textContent = String(entries.length);
+
+        const sourceParts = [];
+        if (remoteCount) sourceParts.push(remoteCount + " from Sheet");
+        if (stagedCount) sourceParts.push(stagedCount + " local staged");
+        document.getElementById("stat-source-note").textContent = sourceParts.length
+          ? sourceParts.join(" · ")
+          : "Compiled baseline archive";
+
+        document.getElementById("stat-disputed-note").textContent =
+          disputedOrSealed > 0
+            ? disputedOrSealed + " disputed or sealed"
+            : "Orders under Rule of Hours";
+
+        if (exportJsonBtn) {
+          exportJsonBtn.style.display = S.isSynodUnlocked() || stagedCount > 0 ? "inline-flex" : "none";
+        }
+      }
+
+      function copyCitation(entry) {
+        const citation =
+          entry.lore_id + " — " + entry.title +
+          " (" + S.formatCategoryLabel(entry.liturgical_category) + ", " +
+          S.formatHourLabel(entry.canonical_hour_or_season) + "; " +
+          entry.scribe_or_order + ")";
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(citation).then(
+            function () {
+              S.showToast("Citation Copied", citation, "success");
+            },
+            function () {
+              S.showBanner("Citation Ready", citation, "info");
+            }
+          );
+        } else {
+          S.showBanner("Citation Ready", citation, "info");
+        }
+      }
+
+      function parseCrossReferenceToken(token) {
+        const clean = token.trim();
+        if (!clean) return null;
+        const idMatch = clean.match(/\b(LC-\d{3,})\b/i);
+        if (idMatch) {
+          return { type: "lore", id: idMatch[1].toUpperCase(), label: clean };
+        }
+        const matchedOrder = (codex.orders || []).find(function (o) {
+          return clean.toLowerCase().indexOf(o.Name.toLowerCase()) !== -1;
+        });
+        if (matchedOrder) {
+          return { type: "order", orderName: matchedOrder.Name, label: clean };
+        }
+        if (/rule of hours|canonical hour/i.test(clean)) {
+          return { type: "hours", label: clean };
+        }
+        if (/charter|synod/i.test(clean)) {
+          return { type: "charter", label: clean };
+        }
+        return { type: "search", query: clean, label: clean };
+      }
+
+      function renderCrossReferenceChips(xrefStr) {
+        const tokens = String(xrefStr || "")
+          .split(/[;,]/)
+          .map(function (t) { return t.trim(); })
+          .filter(Boolean);
+        if (!tokens.length) return "";
+        return (
+          '<div class="xref-list">' +
+            tokens.map(function (tok) {
+              const info = parseCrossReferenceToken(tok);
+              return (
+                '<button type="button" class="xref-chip" ' +
+                  'data-xref-type="' + S.escapeHtml(info.type) + '" ' +
+                  'data-xref-val="' + S.escapeHtml(info.id || info.orderName || info.query || "") + '">' +
+                  S.escapeHtml(info.label) +
+                "</button>"
+              );
+            }).join("") +
+          "</div>"
+        );
+      }
+
+      function handleCrossReferenceClick(type, value) {
+        if (type === "lore") {
+          openFolio(value);
+          return;
+        }
+        if (type === "order") {
+          closeFolio();
+          switchChapter("orders");
+          return;
+        }
+        if (type === "hours") {
+          closeFolio();
+          switchChapter("hours");
+          return;
+        }
+        if (type === "charter") {
+          closeFolio();
+          switchChapter("charter");
+          return;
+        }
+        if (type === "search" && value) {
+          closeFolio();
+          searchInput.value = value;
+          switchChapter("anthology");
+          renderLore();
+        }
+      }
+
+      function renderLoreBodyBlock(entry) {
+        const bodyHtml = '<p class="lore-body drop-cap">' + S.escapeHtml(entry.lore_body) + "</p>";
+        if (entry.synod_status === "Sealed_Apocrypha") {
+          return S.renderWaxSealBlock(
+            entry.lore_id,
+            "Break Wax Seal",
+            "Sealed Apocrypha — Retained under wax lock by Synod decree",
+            bodyHtml
+          );
+        }
+        return bodyHtml;
+      }
+
+      function getFilteredEntries() {
+        const data = S.getMergedEntriesWithMeta();
+        const q = searchInput.value.trim().toLowerCase();
+        const cat = categorySelect.value;
+        const hr = hourSelect.value;
+        const st = statusSelect.value;
+        const sort = sortSelect.value;
+
+        const filtered = data.entries.filter(function (e) {
+          if (cat && e.liturgical_category !== cat) return false;
+          if (hr && e.canonical_hour_or_season !== hr) return false;
+          if (st && e.synod_status !== st) return false;
+          if (!q) return true;
+          const haystack = [
+            e.lore_id,
+            e.title,
+            e.scribe_or_order,
+            e.commune_house_or_choir,
+            e.epigraph_or_antiphon,
+            e.lore_body,
+            e.cross_references
+          ].join(" ").toLowerCase();
+          return haystack.indexOf(q) !== -1;
+        });
+
+        filtered.sort(function (a, b) {
+          if (sort === "id-desc") {
+            return b.lore_id.localeCompare(a.lore_id, undefined, { numeric: true });
+          }
+          if (sort === "submitted-desc") {
+            return String(b.submitted_at || "").localeCompare(String(a.submitted_at || ""));
+          }
+          if (sort === "hour-order") {
+            const idxA = S.HOUR_ORDER.indexOf(a.canonical_hour_or_season);
+            const idxB = S.HOUR_ORDER.indexOf(b.canonical_hour_or_season);
+            if (idxA !== idxB) return (idxA === -1 ? 99 : idxA) - (idxB === -1 ? 99 : idxB);
+          }
+          return a.lore_id.localeCompare(b.lore_id, undefined, { numeric: true });
+        });
+
+        return { filtered: filtered, total: data.entries.length, sources: data.sources };
+      }
+
+      function renderLore() {
+        const res = getFilteredEntries();
+        const filtered = res.filtered;
+        const total = res.total;
+        const sources = res.sources;
+        const unlocked = S.isSynodUnlocked();
+
+        const hasActiveFilters = Boolean(
+          searchInput.value.trim() || categorySelect.value || hourSelect.value || statusSelect.value
+        );
+        resetFiltersBtn.style.display = hasActiveFilters ? "inline-flex" : "none";
+        resultsCount.textContent = "Showing " + filtered.length + " of " + total + " entries";
+
+        if (!filtered.length) {
+          loreContainer.innerHTML =
+            '<div class="empty-state">No liturgical lore entries match the active filters.</div>';
+          return;
+        }
+
+        if (viewMode === "ledger") {
+          let html =
+            '<div class="ledger-wrap"><table class="ledger-table"><thead><tr>' +
+              "<th>ID</th><th>Title &amp; Scribe</th><th>Division</th><th>Hour / Season</th><th>House / Choir</th><th>Status</th><th>Actions</th>" +
+            "</tr></thead><tbody>";
+
+          filtered.forEach(function (entry) {
+            html +=
+              "<tr>" +
+                '<td><span class="lore-id">' + S.escapeHtml(entry.lore_id) + "</span></td>" +
+                "<td>" +
+                  '<button type="button" class="lore-title-btn" data-open-folio="' + S.escapeHtml(entry.lore_id) + '" style="font-weight:700;font-family:var(--font-display);">' +
+                    S.escapeHtml(entry.title) +
+                  "</button>" +
+                  '<div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.15rem;">' + S.escapeHtml(entry.scribe_or_order) + "</div>" +
+                "</td>" +
+                "<td>" + S.escapeHtml(S.formatCategoryLabel(entry.liturgical_category)) + "</td>" +
+                "<td>" + S.escapeHtml(S.formatLabel(entry.canonical_hour_or_season)) + "</td>" +
+                "<td>" + S.escapeHtml(entry.commune_house_or_choir || "—") + "</td>" +
+                '<td><span class="status-badge status-' + S.escapeHtml(entry.synod_status) + '">' + S.escapeHtml(S.formatStatusLabel(entry.synod_status)) + "</span></td>" +
+                '<td><div class="nav-actions">' +
+                  '<button type="button" class="btn btn-subtle btn-sm" data-open-folio="' + S.escapeHtml(entry.lore_id) + '">Read Folio</button>' +
+                  '<button type="button" class="btn btn-subtle btn-sm" data-copy-cite="' + S.escapeHtml(entry.lore_id) + '">Cite</button>' +
+                "</div></td>" +
+              "</tr>";
+          });
+
+          html += "</tbody></table></div>";
+          loreContainer.innerHTML = html;
+          return;
+        }
+
+        const grid = document.createElement("div");
+        grid.className = "lore-grid";
+
+        filtered.forEach(function (entry) {
+          const card = document.createElement("article");
+          card.className = "lore-card";
+          const src = sources.get(entry.lore_id);
+          const provenanceHtml = src === "staged"
+            ? '<span class="provenance-badge">Staged Draft</span>'
+            : (src === "remote" ? '<span class="provenance-badge">Live Sheet</span>' : "");
+
+          const epigraphHtml = (entry.epigraph_or_antiphon || "").trim()
+            ? '<blockquote class="lore-epigraph">&ldquo;' + S.escapeHtml(entry.epigraph_or_antiphon) + "&rdquo;</blockquote>"
+            : "";
+
+          const xrefChipsHtml = renderCrossReferenceChips(entry.cross_references);
+
+          const triageControlHtml = unlocked
+            ? '<select class="btn-sm" data-quick-triage="' + S.escapeHtml(entry.lore_id) + '" aria-label="Change Synod status for ' + S.escapeHtml(entry.lore_id) + '" style="width:auto;padding:0.25rem 0.45rem;font-size:0.76rem;">' +
+                S.ALLOWED_STATUSES.map(function (st) {
+                  return '<option value="' + S.escapeHtml(st) + '"' + (st === entry.synod_status ? " selected" : "") + ">" + S.escapeHtml(S.formatStatusLabel(st)) + "</option>";
+                }).join("") +
+              "</select>"
+            : "";
+
+          card.innerHTML =
+            "<div>" +
+              '<div class="lore-card-top">' +
+                '<div class="lore-id-group">' +
+                  '<span class="lore-id">' + S.escapeHtml(entry.lore_id) + "</span>" +
+                  provenanceHtml +
+                "</div>" +
+                '<span class="status-badge status-' + S.escapeHtml(entry.synod_status) + '">' + S.escapeHtml(S.formatStatusLabel(entry.synod_status)) + "</span>" +
+              "</div>" +
+              '<h3 class="lore-title">' +
+                '<button type="button" class="lore-title-btn" data-open-folio="' + S.escapeHtml(entry.lore_id) + '">' +
+                  S.escapeHtml(entry.title) +
+                "</button>" +
+              "</h3>" +
+              '<div class="lore-tags">' +
+                '<span class="tag-pill">' + S.escapeHtml(S.formatCategoryLabel(entry.liturgical_category)) + "</span>" +
+                '<span class="tag-pill">' + S.escapeHtml(S.formatLabel(entry.canonical_hour_or_season)) + "</span>" +
+                (entry.commune_house_or_choir
+                  ? '<span class="tag-pill">' + S.escapeHtml(entry.commune_house_or_choir) + "</span>"
+                  : "") +
+              "</div>" +
+              epigraphHtml +
+              renderLoreBodyBlock(entry) +
+            "</div>" +
+            '<div class="lore-footer">' +
+              "<div>" +
+                "<div><strong>Scribe:</strong> " + S.escapeHtml(entry.scribe_or_order) + "</div>" +
+                xrefChipsHtml +
+              "</div>" +
+              '<div class="lore-footer-actions">' +
+                '<div class="nav-actions">' +
+                  '<button type="button" class="btn btn-sm" data-open-folio="' + S.escapeHtml(entry.lore_id) + '">Read Folio</button>' +
+                  '<button type="button" class="btn btn-subtle btn-sm" data-copy-cite="' + S.escapeHtml(entry.lore_id) + '">Copy Citation</button>' +
+                "</div>" +
+                triageControlHtml +
+              "</div>" +
+            "</div>";
+
+          grid.appendChild(card);
+        });
+
+        loreContainer.innerHTML = "";
+        loreContainer.appendChild(grid);
+      }
+
+      /* Folio Reader Modal */
+      function openFolio(loreId, skipHashUpdate) {
+        const entries = S.getMergedEntries();
+        const entry = entries.find(function (e) {
+          return e.lore_id.toUpperCase() === String(loreId || "").toUpperCase();
+        });
+        if (!entry) {
+          S.showToast("Folio Not Found", "No entry matching " + loreId + " in the current archive.", "error");
+          return;
+        }
+        openFolioId = entry.lore_id;
+        if (!skipHashUpdate) {
+          history.replaceState(null, "", "#anthology/" + entry.lore_id);
+        }
+
+        document.getElementById("folio-modal-meta").innerHTML =
+          '<span class="lore-id">' + S.escapeHtml(entry.lore_id) + "</span>" +
+          '<span class="status-badge status-' + S.escapeHtml(entry.synod_status) + '">' + S.escapeHtml(S.formatStatusLabel(entry.synod_status)) + "</span>" +
+          (entry.submitted_at ? '<span class="tag-pill">' + S.escapeHtml(entry.submitted_at) + "</span>" : "");
+        document.getElementById("folio-modal-title").textContent = entry.title;
+
+        const epigraphHtml = (entry.epigraph_or_antiphon || "").trim()
+          ? '<blockquote class="lore-epigraph" style="font-size:1.15rem;">&ldquo;' + S.escapeHtml(entry.epigraph_or_antiphon) + "&rdquo;</blockquote>"
+          : "";
+
+        const xrefsHtml = renderCrossReferenceChips(entry.cross_references);
+        const unlocked = S.isSynodUnlocked();
+
+        const triageBarHtml = unlocked
+          ? '<div class="synod-triage-bar">' +
+              '<div><strong style="color:var(--amber);">Synod Triage Disposition</strong>' +
+                '<div class="field-hint">' + (S.getConfiguredWebhookUrl() ? "Updates Lore_Submissions directly" : "Local workbench override") + "</div></div>" +
+              '<div class="synod-actions">' +
+                S.ALLOWED_STATUSES.map(function (st) {
+                  const active = st === entry.synod_status;
+                  return '<button type="button" class="btn btn-sm ' + (active ? "btn-primary" : "btn-subtle") + '" data-folio-triage="' + S.escapeHtml(st) + '">' +
+                    S.escapeHtml(S.formatStatusLabel(st)) + "</button>";
+                }).join("") +
+              "</div>" +
+            "</div>"
+          : "";
+
+        document.getElementById("folio-modal-body").innerHTML =
+          '<div class="lore-tags" style="margin-top:0;margin-bottom:1rem;">' +
+            '<span class="tag-pill">' + S.escapeHtml(S.formatCategoryLabel(entry.liturgical_category)) + "</span>" +
+            '<span class="tag-pill">' + S.escapeHtml(S.formatHourLabel(entry.canonical_hour_or_season)) + "</span>" +
+            (entry.commune_house_or_choir ? '<span class="tag-pill">' + S.escapeHtml(entry.commune_house_or_choir) + "</span>" : "") +
+          "</div>" +
+          epigraphHtml +
+          renderLoreBodyBlock(entry) +
+          '<div style="margin-top:1.15rem;padding-top:0.85rem;border-top:1px solid var(--border);">' +
+            '<div style="font-size:0.86rem;color:var(--text-muted);"><strong>Scribe / Order:</strong> <span style="color:var(--text);">' + S.escapeHtml(entry.scribe_or_order) + "</span></div>" +
+            (xrefsHtml ? '<div style="margin-top:0.45rem;font-size:0.84rem;color:var(--text-muted);"><strong>Cross-References:</strong>' + xrefsHtml + "</div>" : "") +
+          "</div>" +
+          triageBarHtml +
+          '<div class="form-actions" style="margin-top:1.15rem;">' +
+            '<button type="button" id="folio-copy-cite-btn" class="btn btn-sm">Copy Citation</button>' +
+            '<button type="button" id="folio-copy-link-btn" class="btn btn-subtle btn-sm">Copy Folio Link</button>' +
+            (!unlocked ? '<button type="button" id="folio-unlock-synod-btn" class="btn btn-subtle btn-sm">Unlock Synod Triage</button>' : "") +
+          "</div>";
+
+        document.getElementById("folio-copy-cite-btn").addEventListener("click", function () {
+          copyCitation(entry);
+        });
+        document.getElementById("folio-copy-link-btn").addEventListener("click", function () {
+          const url = window.location.href.split("#")[0] + "#anthology/" + entry.lore_id;
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(function () {
+              S.showToast("Permalink Copied", url, "success");
+            });
+          } else {
+            S.showBanner("Folio Permalink", url, "info");
+          }
+        });
+        const unlockBtn = document.getElementById("folio-unlock-synod-btn");
+        if (unlockBtn) {
+          unlockBtn.addEventListener("click", S.openSettingsModal);
+        }
+
+        folioModal.classList.add("is-open");
+      }
+
+      function closeFolio(skipHashReset) {
+        if (!folioModal.classList.contains("is-open")) return;
+        folioModal.classList.remove("is-open");
+        openFolioId = null;
+        if (!skipHashReset && activeChapter === "anthology") {
+          history.replaceState(null, "", "#anthology");
+        }
+      }
+
+      document.getElementById("close-folio-modal").addEventListener("click", function () {
+        closeFolio(false);
+      });
+      folioModal.addEventListener("click", function (event) {
+        if (event.target === folioModal) closeFolio(false);
+      });
+
+      /* Codex Chapter Renderers */
+      function renderCharter() {
+        const charterHtml = S.renderMarkdown(codex.charter_md || "");
+        const communeHtml = S.renderMarkdown(codex.commune_md || "");
+        document.getElementById("charter-grid").innerHTML =
+          '<article class="codex-sheet markdown-prose">' + charterHtml + "</article>" +
+          '<article class="codex-sheet markdown-prose">' + communeHtml + "</article>";
+      }
+
+      function renderHours() {
+        const calendar = codex.calendar || [];
+        const entries = S.getMergedEntries();
+        const activeWatch = S.getActiveCanonicalHour();
+        document.getElementById("count-hours").textContent = String(calendar.length);
+
+        const grid = document.getElementById("hours-grid");
+        grid.innerHTML = calendar.map(function (row) {
+          const isNow = row.Hour_Or_Season === activeWatch.hour;
+          const matchingCount = entries.filter(function (e) {
+            return e.canonical_hour_or_season === row.Hour_Or_Season;
+          }).length;
+          return (
+            '<article class="codex-card' + (isNow ? " is-current-hour" : "") + '">' +
+              "<div>" +
+                '<div class="codex-card-head">' +
+                  '<span class="lore-id">' + S.escapeHtml(S.formatLabel(row.Cycle_Type)) + "</span>" +
+                  (isNow
+                    ? '<span class="status-badge status-Pending_Synod">Active Watch Now</span>'
+                    : '<span class="tag-pill">' + S.escapeHtml(row.Bell_Toll) + "</span>") +
+                "</div>" +
+                "<h3>" + S.escapeHtml(S.formatLabel(row.Hour_Or_Season)) + "</h3>" +
+                '<div class="kv-list" style="margin-top:0.65rem;">' +
+                  '<div class="kv-item"><strong>Bell Toll:</strong> ' + S.escapeHtml(row.Bell_Toll) + "</div>" +
+                  '<div class="kv-item"><strong>Observance:</strong> ' + S.escapeHtml(row.Communal_Observance) + "</div>" +
+                  '<div class="kv-item"><strong>Permitted Speech:</strong> ' + S.escapeHtml(row.Permitted_Speech) + "</div>" +
+                  '<div class="kv-item"><strong>Presiding Order:</strong> ' + S.escapeHtml(row.Presiding_Order) + "</div>" +
+                "</div>" +
+              "</div>" +
+              '<div class="nav-actions">' +
+                '<button type="button" class="btn btn-subtle btn-sm" data-filter-hour="' + S.escapeHtml(row.Hour_Or_Season) + '">' +
+                  "View Entries (" + matchingCount + ")" +
+                "</button>" +
+                '<button type="button" class="btn btn-subtle btn-sm" data-jump-chapter="orders">Presiding Order</button>' +
+              "</div>" +
+            "</article>"
+          );
+        }).join("");
+      }
+
+      function renderOrders() {
+        const orders = codex.orders || [];
+        const personae = codex.personae || [];
+        const entries = S.getMergedEntries();
+        document.getElementById("count-orders").textContent = String(orders.length);
+
+        document.getElementById("orders-grid").innerHTML = orders.map(function (ord) {
+          const members = personae.filter(function (p) {
+            return p.House_Or_Order === ord.Name;
+          });
+          const loreCount = entries.filter(function (e) {
+            return (e.commune_house_or_choir || "").toLowerCase() === ord.Name.toLowerCase() ||
+              (e.scribe_or_order || "").toLowerCase().indexOf(ord.Name.toLowerCase()) !== -1;
+          }).length;
+          const standingClass = ord.Standing === "Canonized" ? "status-Canonized" : "status-Pending_Synod";
+
+          return (
+            '<article class="codex-card">' +
+              "<div>" +
+                '<div class="codex-card-head">' +
+                  '<span class="lore-id">' + S.escapeHtml(ord.Order_ID) + "</span>" +
+                  '<span class="status-badge ' + standingClass + '">' + S.escapeHtml(S.formatLabel(ord.Standing)) + "</span>" +
+                "</div>" +
+                "<h3>" + S.escapeHtml(ord.Name) + "</h3>" +
+                '<p style="margin:0.45rem 0 0.7rem;font-size:0.88rem;color:var(--text-muted);">' + S.escapeHtml(ord.Role_In_Commune) + "</p>" +
+                '<div class="kv-list">' +
+                  '<div class="kv-item"><strong>Governing Vow:</strong> ' + S.escapeHtml(ord.Governing_Vow) + "</div>" +
+                  '<div class="kv-item"><strong>Cloister Seat:</strong> ' + S.escapeHtml(ord.Cloister_Seat) + "</div>" +
+                  '<div class="kv-item"><strong>Liturgical Symbol:</strong> ' + S.escapeHtml(ord.Liturgical_Symbol) + "</div>" +
+                  '<div class="kv-item"><strong>Canonical Hour:</strong> ' + S.escapeHtml(ord.Canonical_Hour) + "</div>" +
+                  (members.length
+                    ? '<div class="kv-item"><strong>Custodian:</strong> ' + S.escapeHtml(members.map(function (m) { return m.Name; }).join(", ")) + "</div>"
+                    : "") +
+                "</div>" +
+              "</div>" +
+              '<div class="nav-actions">' +
+                '<button type="button" class="btn btn-subtle btn-sm" data-filter-order="' + S.escapeHtml(ord.Name) + '">' +
+                  "Filter Order Lore (" + loreCount + ")" +
+                "</button>" +
+                '<button type="button" class="btn btn-subtle btn-sm" data-filter-hour="' + S.escapeHtml(ord.Canonical_Hour) + '">' +
+                  "Hour: " + S.escapeHtml(ord.Canonical_Hour) +
+                "</button>" +
+              "</div>" +
+            "</article>"
+          );
+        }).join("");
+      }
+
+      function renderPersonae() {
+        const personae = codex.personae || [];
+        document.getElementById("count-personae").textContent = String(personae.length);
+
+        document.getElementById("personae-grid").innerHTML = personae.map(function (p) {
+          const badgeClass = p.Status === "Active" ? "status-Canonized" : "status-Disputed";
+          const secretHtml = '<p style="margin:0;font-size:0.88rem;color:var(--text);">' + S.escapeHtml(p.Private_Schism) + "</p>";
+          return (
+            '<article class="codex-card">' +
+              "<div>" +
+                '<div class="codex-card-head">' +
+                  '<span class="lore-id">' + S.escapeHtml(p.Character_ID) + "</span>" +
+                  '<span class="status-badge ' + badgeClass + '">' + S.escapeHtml(S.formatLabel(p.Status)) + "</span>" +
+                "</div>" +
+                "<h3>" + S.escapeHtml(p.Name) + "</h3>" +
+                '<div class="lore-tags" style="margin-bottom:0.75rem;">' +
+                  '<span class="tag-pill">' + S.escapeHtml(p.Office_Or_Title) + "</span>" +
+                  '<span class="tag-pill">' + S.escapeHtml(S.formatLabel(p.Vow_Tier)) + "</span>" +
+                "</div>" +
+                '<div class="kv-list" style="margin-bottom:0.85rem;">' +
+                  '<div class="kv-item"><strong>House / Order:</strong> ' + S.escapeHtml(p.House_Or_Order) + "</div>" +
+                  '<div class="kv-item"><strong>Public Virtue:</strong> ' + S.escapeHtml(p.Public_Virtue) + "</div>" +
+                "</div>" +
+                S.renderWaxSealBlock(
+                  p.Character_ID,
+                  "Break Wax Seal",
+                  "Private Schism — Sealed marginalia dossier",
+                  secretHtml
+                ) +
+              "</div>" +
+              '<div class="nav-actions">' +
+                '<button type="button" class="btn btn-subtle btn-sm" data-filter-order="' + S.escapeHtml(p.Name) + '">Entries by Scribe</button>' +
+                '<button type="button" class="btn btn-subtle btn-sm" data-jump-chapter="orders">View Order</button>' +
+              "</div>" +
+            "</article>"
+          );
+        }).join("");
+      }
+
+      function renderAtlas() {
+        const s = suiteConfig.suite || {};
+        const gh = suiteConfig.github || {};
+        const rootDrive = (suiteConfig.drive && suiteConfig.drive.root_folder) || {};
+        const formCfg = s.liturgical_lore_form || {};
+
+        const items = [
+          {
+            kind: "GitHub Pages",
+            name: "Live Scriptorium Portal",
+            desc: "Public web codex and intake portal deployed via GitHub Actions.",
+            url: gh.pages_url
+          },
+          {
+            kind: "GitHub Repository",
+            name: (gh.owner || "randomcase") + "/" + (gh.repo || "Othello"),
+            desc: "Versioned Markdown charter, JSON schema, validation CI, and site source.",
+            url: gh.url
+          },
+          {
+            kind: "Google Drive",
+            name: "Othello Root Folder",
+            desc: "Master folder organizing intake, codex, registries, and visual reliquary.",
+            url: rootDrive.url
+          },
+          {
+            kind: "Google Docs",
+            name: (s.codex_doc && s.codex_doc.title) || "World Codex & Liturgical Canon",
+            desc: "Three-tab master codex syncing World Charter, Commune Rule, and Anthology.",
+            url: s.codex_doc && s.codex_doc.url
+          },
+          {
+            kind: "Google Sheets",
+            name: (s.intake_sheet && s.intake_sheet.title) || "Liturgical Commune Lore Intake",
+            desc: "Live submission ledger and embedded Apps Script Form generator.",
+            url: s.intake_sheet && s.intake_sheet.url
+          },
+          {
+            kind: "Google Forms",
+            name: formCfg.title || "Native Google Lore Form",
+            desc: "Auto-linked Google Form routing responses directly into Lore_Submissions.",
+            url: formCfg.form_url
+          },
+          {
+            kind: "Google Sheets",
+            name: (s.registry_sheet && s.registry_sheet.title) || "Commune Registry & Chronicle",
+            desc: "Structured Orders & Houses, Dramatis Personae, and Liturgical Calendar.",
+            url: s.registry_sheet && s.registry_sheet.url
+          },
+          {
+            kind: "Google Slides",
+            name: (s.briefing_slides && s.briefing_slides.title) || "Liturgical Commune Briefing",
+            desc: "Visual Synod briefing covering the Commune pillars and 7 lore divisions.",
+            url: s.briefing_slides && s.briefing_slides.url
+          },
+          {
+            kind: "Google Colab",
+            name: (s.colab_notebook && s.colab_notebook.title) || "Othello Scriptorium Lore Engine",
+            desc: "Interactive notebook for motif seeding and canonical ID generation.",
+            url: s.colab_notebook && s.colab_notebook.url
+          }
+        ].filter(function (item) {
+          return Boolean(item.url);
+        });
+
+        document.getElementById("count-atlas").textContent = String(items.length);
+        document.getElementById("atlas-grid").innerHTML = items.map(function (item) {
+          return (
+            '<a class="atlas-card" href="' + S.escapeHtml(S.safeHref(item.url)) + '" target="_blank" rel="noopener noreferrer">' +
+              '<span class="atlas-kind">' + S.escapeHtml(item.kind) + "</span>" +
+              '<span class="atlas-name">' + S.escapeHtml(item.name) + "</span>" +
+              '<span class="atlas-desc">' + S.escapeHtml(item.desc) + "</span>" +
+            "</a>"
+          );
+        }).join("");
+      }
+
+      /* Chapter Navigation & Hash Routing */
+      function switchChapter(chapter, skipHashUpdate) {
+        const valid = ["anthology", "charter", "hours", "orders", "personae", "atlas"];
+        const target = valid.indexOf(chapter) !== -1 ? chapter : "anthology";
+        activeChapter = target;
+
+        document.querySelectorAll(".codex-tab").forEach(function (tab) {
+          const isMatch = tab.getAttribute("data-chapter") === target;
+          tab.classList.toggle("is-active", isMatch);
+          tab.setAttribute("aria-selected", isMatch ? "true" : "false");
+        });
+
+        document.querySelectorAll(".chapter-panel").forEach(function (panel) {
+          panel.classList.toggle("is-active", panel.id === "panel-" + target);
+        });
+
+        if (!skipHashUpdate) {
+          history.replaceState(null, "", "#" + target);
+        }
+      }
+
+      function applyRouteFromHash() {
+        const raw = (window.location.hash || "").replace(/^#/, "");
+        if (!raw) {
+          switchChapter("anthology", true);
+          return;
+        }
+        const parts = raw.split("/");
+        const chapter = parts[0] || "anthology";
+        switchChapter(chapter, true);
+        if (chapter === "anthology" && parts[1]) {
+          openFolio(parts[1], true);
+        } else {
+          closeFolio(true);
+        }
+      }
+
+      document.querySelectorAll(".codex-tab").forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          closeFolio(true);
+          switchChapter(tab.getAttribute("data-chapter"));
+        });
+      });
+
+      document.addEventListener("click", function (event) {
+        const jumpBtn = event.target.closest("[data-jump-chapter]");
+        if (jumpBtn) {
+          switchChapter(jumpBtn.getAttribute("data-jump-chapter"));
+          return;
+        }
+
+        const folioBtn = event.target.closest("[data-open-folio]");
+        if (folioBtn) {
+          openFolio(folioBtn.getAttribute("data-open-folio"));
+          return;
+        }
+
+        const citeBtn = event.target.closest("[data-copy-cite]");
+        if (citeBtn) {
+          const id = citeBtn.getAttribute("data-copy-cite");
+          const entry = S.getMergedEntries().find(function (e) { return e.lore_id === id; });
+          if (entry) copyCitation(entry);
+          return;
+        }
+
+        const xrefBtn = event.target.closest("[data-xref-type]");
+        if (xrefBtn) {
+          handleCrossReferenceClick(
+            xrefBtn.getAttribute("data-xref-type"),
+            xrefBtn.getAttribute("data-xref-val")
+          );
+          return;
+        }
+
+        const hourFilterBtn = event.target.closest("[data-filter-hour]");
+        if (hourFilterBtn) {
+          hourSelect.value = hourFilterBtn.getAttribute("data-filter-hour");
+          switchChapter("anthology");
+          renderLore();
+          return;
+        }
+
+        const orderFilterBtn = event.target.closest("[data-filter-order]");
+        if (orderFilterBtn) {
+          searchInput.value = orderFilterBtn.getAttribute("data-filter-order");
+          switchChapter("anthology");
+          renderLore();
+          return;
+        }
+
+        const folioTriageBtn = event.target.closest("[data-folio-triage]");
+        if (folioTriageBtn && openFolioId) {
+          const nextStatus = folioTriageBtn.getAttribute("data-folio-triage");
+          folioTriageBtn.disabled = true;
+          S.updateSynodStatus(openFolioId, nextStatus)
+            .then(function (res) {
+              S.showToast(
+                "Synod Disposition Updated",
+                res.lore_id + " -> " + S.formatStatusLabel(res.synod_status) + (res.remoteUpdated ? " (Saved to Sheet)" : " (Saved locally)"),
+                "success"
+              );
+              openFolio(openFolioId, true);
+            })
+            .catch(function (err) {
+              S.showToast("Triage Error", err.message, "error");
+              folioTriageBtn.disabled = false;
+            });
+        }
+      });
+
+      document.addEventListener("change", function (event) {
+        const quickSelect = event.target.closest("[data-quick-triage]");
+        if (!quickSelect) return;
+        const id = quickSelect.getAttribute("data-quick-triage");
+        const nextStatus = quickSelect.value;
+        quickSelect.disabled = true;
+        S.updateSynodStatus(id, nextStatus)
+          .then(function (res) {
+            S.showToast(
+              "Synod Disposition Updated",
+              res.lore_id + " -> " + S.formatStatusLabel(res.synod_status),
+              "success"
+            );
+          })
+          .catch(function (err) {
+            S.showToast("Triage Error", err.message, "error");
+            renderLore();
+          });
+      });
+
+      resetFiltersBtn.addEventListener("click", function () {
+        searchInput.value = "";
+        categorySelect.value = "";
+        hourSelect.value = "";
+        statusSelect.value = "";
+        renderLore();
+      });
+
+      viewCardsBtn.addEventListener("click", function () {
+        viewMode = "cards";
+        viewCardsBtn.classList.add("is-active");
+        viewLedgerBtn.classList.remove("is-active");
+        renderLore();
+      });
+
+      viewLedgerBtn.addEventListener("click", function () {
+        viewMode = "ledger";
+        viewLedgerBtn.classList.add("is-active");
+        viewCardsBtn.classList.remove("is-active");
+        renderLore();
+      });
+
+      [searchInput, categorySelect, hourSelect, statusSelect, sortSelect].forEach(function (el) {
+        el.addEventListener("input", renderLore);
+        el.addEventListener("change", renderLore);
+      });
+
+      window.addEventListener("hashchange", applyRouteFromHash);
+      window.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          closeFolio(false);
+          S.closeSettingsModal();
+        }
+      });
+
+      function refreshAll() {
+        populateFilterOptions();
+        populateStats();
+        renderLore();
+        renderHours();
+        renderOrders();
+        if (openFolioId) {
+          openFolio(openFolioId, true);
+        }
+      }
+
+      if (!S.getMergedEntries().length) {
+        S.showBanner(
+          "Scriptorium Archive Empty",
+          "Run `python scripts/validate_lore.py` to compile the lore bundle before opening.",
+          "error"
+        );
+      }
+
+      populateFilterOptions();
+      populateStats();
+      renderLore();
+      renderCharter();
+      renderHours();
+      renderOrders();
+      renderPersonae();
+      renderAtlas();
+      applyRouteFromHash();
+
+      S.onDataChanged(refreshAll);
+      S.fetchRemoteLore(true).then(function (res) {
+        if (res && res.ok && window.location.hash.indexOf("#anthology/LC-") === 0 && !openFolioId) {
+          applyRouteFromHash();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

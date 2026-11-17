@@ -1,0 +1,10 @@
+Hour_Or_Season,Cycle_Type,Bell_Toll,Communal_Observance,Permitted_Speech,Presiding_Order
+Vigils,Canonical_Hour,3rd Hour Before Dawn,Alternating antiphonal psalmody and beacon tending,Chanted Verse Only,Choir of the First Watch
+Lauds,Canonical_Hour,First Light,"Ink grinding, chronicle reading, and Synod docket review",Formal Readings,Scriptorium of the Ash-Ink
+Prime,Canonical_Hour,Sunrise,"Allotment of tools, reed pens, and daily labor pairs",Practical Work Orders,House of the Common Table
+Sext,Canonical_Hour,High Noon,Shared salt & barley meal; wax-tablet grievances laid by bowl,Strict Silence,House of the Common Table
+Vespers,Canonical_Hour,Dusk,Foundry bells toll; wax grievances read aloud before elders,Synod Confession & Response,Order of Bell-Founders
+Compline,Canonical_Hour,Nightfall,Reliquaries locked; lamps lowered to single sanctuary wick,Silent Prayer,Hermits of the Sealed Marginalia
+Great_Fast,Liturgical_Season,Forty Days Before Equinox,Hearth fires banked; salt withheld from evening broth,Whispered Counsel,Choir of the First Watch
+Feast_Of_Ashes,Liturgical_Season,Autumn Equinox,Old parchment trimmings burned to grind fresh lampblack ink,Public Recitation of Canon,Scriptorium of the Ash-Ink
+Ordinary_Time,Liturgical_Season,Remaining Calendar,"Standard agricultural, foundry, and scriptorium rotation",Normal Communal Rule,House of the Common Table

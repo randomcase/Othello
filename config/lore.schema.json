@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Othello Liturgical Commune Lore Entry",
+  "type": "object",
+  "required": [
+    "lore_id",
+    "submitted_at",
+    "scribe_or_order",
+    "title",
+    "liturgical_category",
+    "canonical_hour_or_season",
+    "commune_house_or_choir",
+    "epigraph_or_antiphon",
+    "lore_body",
+    "cross_references",
+    "synod_status"
+  ],
+  "properties": {
+    "lore_id": {
+      "type": "string",
+      "pattern": "^LC-[0-9]{3,}$"
+    },
+    "submitted_at": {
+      "type": "string"
+    },
+    "scribe_or_order": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "liturgical_category": {
+      "type": "string",
+      "enum": [
+        "Canticle_Or_Hymn",
+        "Canon_Precept",
+        "Rite_Or_Sacrament",
+        "Hagiography_Or_Martyr",
+        "Relic_Or_Vestment",
+        "Commune_Chronicle",
+        "Apocrypha_Or_Heresy"
+      ]
+    },
+    "canonical_hour_or_season": {
+      "type": "string",
+      "enum": [
+        "Vigils",
+        "Lauds",
+        "Prime",
+        "Sext",
+        "Vespers",
+        "Compline",
+        "Great_Fast",
+        "Feast_Of_Ashes",
+        "Ordinary_Time"
+      ]
+    },
+    "commune_house_or_choir": {
+      "type": "string"
+    },
+    "epigraph_or_antiphon": {
+      "type": "string"
+    },
+    "lore_body": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cross_references": {
+      "type": "string"
+    },
+    "synod_status": {
+      "type": "string",
+      "enum": [
+        "Pending_Synod",
+        "Canonized",
+        "Sealed_Apocrypha",
+        "Disputed"
+      ]
+    }
+  }
+}

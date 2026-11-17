@@ -1,0 +1,6 @@
+Character_ID,Name,Office_Or_Title,House_Or_Order,Vow_Tier,Public_Virtue,Private_Schism,Status
+CHR-01,Cantor Aurelian,Precentor of the Night Choir,Choir of the First Watch,Perpetual_Vow,Unflinching steadiness during the winter Vigils,Quietly omits three ancient verses naming a forgotten founder,Active
+CHR-02,Stewardess Mara,Matron of the Common Table,House of the Common Table,Perpetual_Vow,Fair rationing across famine winters without favoritism,Keeps a private ledger of secret grain tithes sent beyond the wall,Active
+CHR-03,Archivist Veron,Master of the Ash-Ink Scriptorium,Scriptorium of the Ash-Ink,Synod_Elder,Encyclopedic memory of every canon and heresy,Suspects LC-003 was cast intentionally during a purge rather than an accident,Active
+CHR-04,Brother Cassian,Master Bell-Founder,Order of Bell-Founders,Triennial_Vow,Devotion to acoustic purity and bronze craft,Hears rhythmic echoes inside the un-struck Cinder-Bell at midnight,Active
+CHR-05,Sister Iolanthe,Keeper of the Sealed Marginalia,Hermits of the Sealed Marginalia,Solitary_Vow,Mercy toward penitents whose writings were condemned,Copies banned canticles inside the margins of orthodox psalters,Monitored_By_Synod

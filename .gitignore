@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.DS_Store
+Thumbs.db
+.gdocs_sync/
+*.tmp
+.vscode/
+site/assets/

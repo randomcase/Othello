@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Othello — Liturgical Commune Lore Submission</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="canonical-watch-strip" class="watch-strip" aria-label="Canonical Hour Watch"></div>
+
+  <div class="page-shell">
+    <header class="site-header">
+      <div class="brand">
+        <img
+          class="emblem"
+          src="assets/commune-emblem.jpg"
+          alt="Othello Liturgical Commune Emblem"
+          onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='../assets/commune-emblem.jpg';}"
+        />
+        <div>
+          <p class="brand-eyebrow">Liturgical Intake Portal</p>
+          <h1 class="brand-title">Othello — Liturgical Commune Lore Submission</h1>
+          <p class="brand-subtitle">Inscribe new canticles, precepts, rites, hagiographies, relics, or apocrypha for Synod triage.</p>
+        </div>
+      </div>
+      <nav class="nav-actions" aria-label="Portal Navigation">
+        <a class="btn btn-subtle" href="./index.html">&larr; Return to Scriptorium</a>
+        <a id="native-form-link" class="btn btn-subtle" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">Open Native Google Form</a>
+      </nav>
+    </header>
+
+    <div id="inline-banner" class="inline-banner" role="status" aria-live="polite">
+      <div class="inline-banner-body">
+        <p id="inline-banner-title" class="inline-banner-title"></p>
+        <p id="inline-banner-text" class="inline-banner-text"></p>
+      </div>
+      <button type="button" class="inline-banner-close" aria-label="Dismiss notice" onclick="dismissBanner()">&times;</button>
+    </div>
+
+    <div class="split-desk">
+      <main class="form-card">
+        <div class="form-desk-bar">
+          <div>
+            <h2 style="margin:0;font-size:1.18rem;color:var(--amber);">Inscribe New Parchment</h2>
+            <span id="draft-status-pill" class="field-hint">Fresh Parchment</span>
+          </div>
+          <button type="button" id="draw-seed-btn" class="btn btn-sm">Draw Scriptorium Seed</button>
+        </div>
+
+        <form id="lore-form" novalidate>
+          <input type="text" id="_hp" name="_hp" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+          <div class="form-grid">
+            <div class="field-group">
+              <label class="field-label" for="scribe_or_order">
+                Scribe or Order <span class="required-mark">*</span>
+              </label>
+              <input
+                id="scribe_or_order"
+                name="scribe_or_order"
+                type="text"
+                placeholder="e.g., Cantor Aurelian of the First Watch"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="title">
+                Lore Entry Title <span class="required-mark">*</span>
+              </label>
+              <input
+                id="title"
+                name="title"
+                type="text"
+                placeholder="e.g., Vigil of the Tempered Reed"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="liturgical_category">
+                Liturgical Category <span class="required-mark">*</span>
+              </label>
+              <select id="liturgical_category" name="liturgical_category" required>
+                <option value="">Select a liturgical division...</option>
+                <option value="Canticle_Or_Hymn">Canticle or Hymn</option>
+                <option value="Canon_Precept">Canon Precept</option>
+                <option value="Rite_Or_Sacrament">Rite or Sacrament</option>
+                <option value="Hagiography_Or_Martyr">Hagiography or Martyr</option>
+                <option value="Relic_Or_Vestment">Relic or Vestment</option>
+                <option value="Commune_Chronicle">Commune Chronicle</option>
+                <option value="Apocrypha_Or_Heresy">Apocrypha or Heresy</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="canonical_hour_or_season">
+                Canonical Hour or Season <span class="required-mark">*</span>
+              </label>
+              <select id="canonical_hour_or_season" name="canonical_hour_or_season" required>
+                <option value="">Select an hour or observance...</option>
+                <option value="Vigils">Vigils — 3rd Hour Before Dawn</option>
+                <option value="Lauds">Lauds — First Light</option>
+                <option value="Prime">Prime — Sunrise</option>
+                <option value="Sext">Sext — High Noon</option>
+                <option value="Vespers">Vespers — Dusk</option>
+                <option value="Compline">Compline — Nightfall</option>
+                <option value="Great_Fast">Great Fast — Forty Days Before Equinox</option>
+                <option value="Feast_Of_Ashes">Feast of Ashes — Autumn Equinox</option>
+                <option value="Ordinary_Time">Ordinary Time — Standard Calendar</option>
+              </select>
+            </div>
+
+            <div id="rubric-box" class="rubric-box span-full" aria-live="polite">
+              <div><strong>Liturgical Rubric:</strong> Select a Category and Canonical Hour above to view Synod conventions and presiding speech rules.</div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="commune_house_or_choir">Commune House or Choir</label>
+              <input
+                id="commune_house_or_choir"
+                name="commune_house_or_choir"
+                type="text"
+                list="commune-houses"
+                placeholder="Select or enter House / Choir"
+              />
+              <datalist id="commune-houses">
+                <option value="Choir of the First Watch"></option>
+                <option value="House of the Common Table"></option>
+                <option value="Scriptorium of the Ash-Ink"></option>
+                <option value="Order of Bell-Founders"></option>
+                <option value="Hermits of the Sealed Marginalia"></option>
+              </datalist>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="cross_references">Cross-References</label>
+              <input
+                id="cross_references"
+                name="cross_references"
+                type="text"
+                placeholder="e.g., Rule of Hours II.3; LC-001"
+              />
+              <div id="xref-picker" class="chip-picker" aria-label="Quick Cross-Reference Chips"></div>
+            </div>
+
+            <div class="field-group span-full">
+              <label class="field-label" for="epigraph_or_antiphon">Epigraph or Antiphon</label>
+              <textarea
+                id="epigraph_or_antiphon"
+                name="epigraph_or_antiphon"
+                rows="2"
+                placeholder="Optional chanted line or carved stone inscription..."
+              ></textarea>
+            </div>
+
+            <div class="field-group span-full">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                <label class="field-label" for="lore_body">
+                  Full Lore Text <span class="required-mark">*</span>
+                </label>
+                <span id="body-counter" class="field-hint">0 chars</span>
+              </div>
+              <textarea
+                id="lore_body"
+                name="lore_body"
+                rows="7"
+                placeholder="Record the full canticle, precept, rite, hagiography, relic history, or chronicle..."
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-actions span-full">
+              <button type="submit" id="submit-lore-btn" class="btn btn-primary">Inscribe &amp; Dispatch Lore</button>
+              <button type="button" id="reset-btn" class="btn btn-subtle">Clear Parchment</button>
+              <button type="button" id="form-connection-btn" class="btn btn-subtle">Configure Endpoint</button>
+            </div>
+
+            <div id="connection-hint" class="field-hint span-full"></div>
+          </div>
+        </form>
+      </main>
+
+      <aside class="preview-pane" aria-label="Live Illuminated Lore Preview">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:0.5rem;margin-bottom:0.85rem;">
+          <div>
+            <p class="brand-eyebrow" style="margin:0;">Scriptorium Proofing Desk</p>
+            <h2 style="margin:0.15rem 0 0;font-size:1.08rem;color:var(--amber);">Live Illuminated Preview</h2>
+          </div>
+          <span class="tag-pill">Pending Synod</span>
+        </div>
+
+        <article id="live-preview-card" class="lore-card"></article>
+
+        <section id="json-drawer" class="drawer-card" aria-live="polite">
+          <div class="drawer-head">
+            <h3>Compiled Record (<span id="drawer-lore-id">LC-004</span>)</h3>
+            <div class="nav-actions">
+              <button type="button" id="copy-json-btn" class="btn btn-sm">Copy JSON</button>
+              <button type="button" id="download-json-btn" class="btn btn-primary btn-sm">Download JSON</button>
+              <a id="view-in-anthology-btn" class="btn btn-subtle btn-sm" href="./index.html">View in Anthology &rarr;</a>
+            </div>
+          </div>
+          <pre id="json-preview" class="json-preview"></pre>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+
+  <script src="./lore-data.js"></script>
+  <script src="./scriptorium-core.js"></script>
+  <script>
+    (function () {
+      const DRAFT_KEY = "othello_form_draft_v1";
+      const S = window.OthelloScriptorium;
+      const codex = S.getCodex();
+
+      const form = document.getElementById("lore-form");
+      const scribeInput = document.getElementById("scribe_or_order");
+      const titleInput = document.getElementById("title");
+      const categorySelect = document.getElementById("liturgical_category");
+      const hourSelect = document.getElementById("canonical_hour_or_season");
+      const houseInput = document.getElementById("commune_house_or_choir");
+      const xrefInput = document.getElementById("cross_references");
+      const epigraphInput = document.getElementById("epigraph_or_antiphon");
+      const bodyInput = document.getElementById("lore_body");
+      const hpInput = document.getElementById("_hp");
+
+      const rubricBox = document.getElementById("rubric-box");
+      const xrefPicker = document.getElementById("xref-picker");
+      const bodyCounter = document.getElementById("body-counter");
+      const draftPill = document.getElementById("draft-status-pill");
+      const connectionHint = document.getElementById("connection-hint");
+      const previewCard = document.getElementById("live-preview-card");
+      const drawer = document.getElementById("json-drawer");
+      const drawerId = document.getElementById("drawer-lore-id");
+      const jsonPreview = document.getElementById("json-preview");
+      const viewAnthologyBtn = document.getElementById("view-in-anthology-btn");
+      const submitBtn = document.getElementById("submit-lore-btn");
+
+      let latestEntry = null;
+
+      S.initCanonicalWatch("canonical-watch-strip");
+
+      const nativeFormUrl = S.getNativeFormUrl();
+      const nativeFormLink = document.getElementById("native-form-link");
+      if (nativeFormUrl && nativeFormLink) {
+        nativeFormLink.href = S.safeHref(nativeFormUrl);
+        nativeFormLink.style.display = "inline-flex";
+      }
+
+      document.getElementById("form-connection-btn").addEventListener("click", S.openSettingsModal);
+
+      function populateHousesDatalist() {
+        const dl = document.getElementById("commune-houses");
+        if (!dl || !Array.isArray(codex.orders) || !codex.orders.length) return;
+        dl.innerHTML = codex.orders
+          .map(function (o) {
+            return '<option value="' + S.escapeHtml(o.Name) + '"></option>';
+          })
+          .join("");
+      }
+
+      function renderConnectionHint() {
+        const url = S.getConfiguredWebhookUrl();
+        connectionHint.textContent = url
+          ? "Live mode: submissions dispatch straight to Google Sheets (Lore_Submissions) and stage locally for instant Anthology reading."
+          : "Offline / staging mode: no Apps Script webhook configured yet. Submissions stage locally for immediate Anthology preview and JSON export.";
+      }
+
+      function renderRubricBox() {
+        const cat = categorySelect.value;
+        const hr = hourSelect.value;
+        const lines = [];
+
+        if (cat && S.CATEGORY_META[cat]) {
+          lines.push("<div><strong>" + S.escapeHtml(S.CATEGORY_META[cat].label) + ":</strong> " + S.escapeHtml(S.CATEGORY_META[cat].rubric) + "</div>");
+        }
+        if (hr) {
+          const cal = (codex.calendar || []).find(function (c) { return c.Hour_Or_Season === hr; });
+          if (cal) {
+            lines.push(
+              "<div><strong>" + S.escapeHtml(S.formatLabel(hr)) + " (" + S.escapeHtml(cal.Bell_Toll) + "):</strong> " +
+              S.escapeHtml(cal.Communal_Observance) + " &mdash; <em>Presiding:</em> " +
+              S.escapeHtml(cal.Presiding_Order) + " · <em>Speech:</em> " + S.escapeHtml(cal.Permitted_Speech) + "</div>"
+            );
+          }
+        }
+        if (!lines.length) {
+          lines.push("<div><strong>Liturgical Rubric:</strong> Select a Category and Canonical Hour above to view Synod conventions and presiding speech rules.</div>");
+        }
+        rubricBox.innerHTML = lines.join("");
+      }
+
+      function renderXrefChips() {
+        const tokens = ["Rule of Hours", "Communal Charter"];
+        S.getMergedEntries().slice(0, 6).forEach(function (e) {
+          tokens.push(e.lore_id);
+        });
+        (codex.orders || []).forEach(function (o) {
+          tokens.push(o.Name);
+        });
+
+        const activeList = xrefInput.value
+          .split(/[;,]/)
+          .map(function (t) { return t.trim().toLowerCase(); })
+          .filter(Boolean);
+
+        xrefPicker.innerHTML = tokens.map(function (tok) {
+          const selected = activeList.indexOf(tok.toLowerCase()) !== -1;
+          return (
+            '<button type="button" class="chip-btn' + (selected ? " is-selected" : "") + '" data-toggle-xref="' + S.escapeHtml(tok) + '">' +
+              (selected ? "&#10003; " : "+ ") + S.escapeHtml(tok) +
+            "</button>"
+          );
+        }).join("");
+      }
+
+      xrefPicker.addEventListener("click", function (event) {
+        const btn = event.target.closest("[data-toggle-xref]");
+        if (!btn) return;
+        const token = btn.getAttribute("data-toggle-xref");
+        const current = xrefInput.value
+          .split(/[;,]/)
+          .map(function (t) { return t.trim(); })
+          .filter(Boolean);
+        const idx = current.findIndex(function (t) { return t.toLowerCase() === token.toLowerCase(); });
+        if (idx !== -1) {
+          current.splice(idx, 1);
+        } else {
+          current.push(token);
+        }
+        xrefInput.value = current.join("; ");
+        onFieldChange();
+      });
+
+      function buildEntry(fixedId) {
+        return {
+          lore_id: fixedId || S.nextLoreId(),
+          submitted_at: new Date().toISOString().replace(/\.\d{3}Z$/, "Z"),
+          scribe_or_order: scribeInput.value.trim(),
+          title: titleInput.value.trim(),
+          liturgical_category: categorySelect.value,
+          canonical_hour_or_season: hourSelect.value,
+          commune_house_or_choir: houseInput.value.trim(),
+          epigraph_or_antiphon: epigraphInput.value.trim(),
+          lore_body: bodyInput.value.trim(),
+          cross_references: xrefInput.value.trim(),
+          synod_status: "Pending_Synod"
+        };
+      }
+
+      function validateEntry(entry) {
+        const missing = [];
+        if (!entry.scribe_or_order) missing.push("Scribe or Order");
+        if (!entry.title) missing.push("Lore Entry Title");
+        if (!entry.liturgical_category) missing.push("Liturgical Category");
+        if (!entry.canonical_hour_or_season) missing.push("Canonical Hour or Season");
+        if (!entry.lore_body) missing.push("Full Lore Text");
+        return missing;
+      }
+
+      function renderLivePreview() {
+        const draft = buildEntry(latestEntry ? latestEntry.lore_id : null);
+        const displayTitle = draft.title || "Untitled Parchment Entry";
+        const displayScribe = draft.scribe_or_order || "Anonymous Novice";
+        const displayCat = draft.liturgical_category ? S.formatCategoryLabel(draft.liturgical_category) : "Select Category";
+        const displayHr = draft.canonical_hour_or_season ? S.formatLabel(draft.canonical_hour_or_season) : "Select Hour";
+        const displayBody = draft.lore_body || "Your inscribed canticle, precept, rite, or chronicle will take illuminated shape here as you write...";
+        const epigraphHtml = draft.epigraph_or_antiphon
+          ? '<blockquote class="lore-epigraph">&ldquo;' + S.escapeHtml(draft.epigraph_or_antiphon) + "&rdquo;</blockquote>"
+          : "";
+
+        previewCard.innerHTML =
+          "<div>" +
+            '<div class="lore-card-top">' +
+              '<span class="lore-id">' + S.escapeHtml(draft.lore_id) + "</span>" +
+              '<span class="status-badge status-Pending_Synod">Pending Synod</span>' +
+            "</div>" +
+            '<h3 class="lore-title">' + S.escapeHtml(displayTitle) + "</h3>" +
+            '<div class="lore-tags">' +
+              '<span class="tag-pill">' + S.escapeHtml(displayCat) + "</span>" +
+              '<span class="tag-pill">' + S.escapeHtml(displayHr) + "</span>" +
+              (draft.commune_house_or_choir ? '<span class="tag-pill">' + S.escapeHtml(draft.commune_house_or_choir) + "</span>" : "") +
+            "</div>" +
+            epigraphHtml +
+            '<p class="lore-body drop-cap">' + S.escapeHtml(displayBody) + "</p>" +
+          "</div>" +
+          '<div class="lore-footer">' +
+            "<div><strong>Scribe:</strong> " + S.escapeHtml(displayScribe) + "</div>" +
+            (draft.cross_references ? "<div><strong>Refs:</strong> " + S.escapeHtml(draft.cross_references) + "</div>" : "") +
+          "</div>";
+
+        const len = bodyInput.value.length;
+        const words = bodyInput.value.trim() ? bodyInput.value.trim().split(/\s+/).length : 0;
+        bodyCounter.textContent = len + " chars · " + words + " words";
+      }
+
+      function saveDraft() {
+        const data = {
+          scribe_or_order: scribeInput.value,
+          title: titleInput.value,
+          liturgical_category: categorySelect.value,
+          canonical_hour_or_season: hourSelect.value,
+          commune_house_or_choir: houseInput.value,
+          cross_references: xrefInput.value,
+          epigraph_or_antiphon: epigraphInput.value,
+          lore_body: bodyInput.value
+        };
+        const hasAny = Object.values(data).some(function (v) { return Boolean(String(v || "").trim()); });
+        try {
+          if (hasAny) {
+            localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+            draftPill.textContent = "Draft Autosaved";
+          } else {
+            localStorage.removeItem(DRAFT_KEY);
+            draftPill.textContent = "Fresh Parchment";
+          }
+        } catch (err) {
+          /* ignore */
+        }
+      }
+
+      function restoreDraft() {
+        try {
+          const raw = localStorage.getItem(DRAFT_KEY);
+          if (!raw) return;
+          const data = JSON.parse(raw);
+          if (!data || typeof data !== "object") return;
+          scribeInput.value = data.scribe_or_order || "";
+          titleInput.value = data.title || "";
+          categorySelect.value = data.liturgical_category || "";
+          hourSelect.value = data.canonical_hour_or_season || "";
+          houseInput.value = data.commune_house_or_choir || "";
+          xrefInput.value = data.cross_references || "";
+          epigraphInput.value = data.epigraph_or_antiphon || "";
+          bodyInput.value = data.lore_body || "";
+          draftPill.textContent = "Restored Autosaved Draft";
+        } catch (err) {
+          /* ignore */
+        }
+      }
+
+      function onFieldChange() {
+        renderRubricBox();
+        renderXrefChips();
+        renderLivePreview();
+        saveDraft();
+      }
+
+      [scribeInput, titleInput, categorySelect, hourSelect, houseInput, xrefInput, epigraphInput, bodyInput].forEach(function (el) {
+        el.addEventListener("input", onFieldChange);
+        el.addEventListener("change", onFieldChange);
+      });
+
+      /* Procedural Scriptorium Seed Generator (mirrors Othello_Scriptorium_Lore_Engine.ipynb) */
+      const SEED_MOTIFS = [
+        {
+          title: "Vigil of the Cracked Bronze Censer",
+          motif: "a cracked bronze censer that hums softly before winter marsh-rain",
+          noun: "wick"
+        },
+        {
+          title: "Ledger of the Scraped Salt-Measure",
+          motif: "an iron salt-ledger whose vellum leaves were scraped clean and re-inked in lampblack",
+          noun: "salt-bowl"
+        },
+        {
+          title: "Rite of the Braided Linen Bell-Rope",
+          motif: "a belfry rope braided from the retired linen shrouds of former precentors",
+          noun: "bell-clapper"
+        },
+        {
+          title: "Marginalia of the Contradicted Psalter",
+          motif: "a glossed psalter whose outer margin notes quietly answer the chanted psalm",
+          noun: "ash-ink"
+        },
+        {
+          title: "Precept of the Sunken Cistern Watch",
+          motif: "a sunken stone cistern beneath the west refectory reserved for silent penance",
+          noun: "vesper-lamp"
+        }
+      ];
+
+      const SEED_FRAMES = [
+        "Keep the {noun} unbroken, lest the outer basin forget its name.",
+        "No scribe sits higher than the {noun} at the hour of {hour}.",
+        "What is sealed in {noun} returns to voice when the Synod sleeps."
+      ];
+
+      document.getElementById("draw-seed-btn").addEventListener("click", function () {
+        const categories = Object.keys(S.CATEGORY_META);
+        const hours = S.HOUR_ORDER.slice(0, 6);
+        const orders = codex.orders || [];
+        const pick = function (arr) { return arr[Math.floor(Math.random() * arr.length)]; };
+
+        const cat = pick(categories);
+        const hr = pick(hours);
+        const ord = orders.length ? pick(orders) : { Name: "Scriptorium of the Ash-Ink" };
+        const motifObj = pick(SEED_MOTIFS);
+        const frame = pick(SEED_FRAMES);
+        const antiphon = frame.replace("{noun}", motifObj.noun).replace("{hour}", hr);
+
+        const person = (codex.personae || []).find(function (p) { return p.House_Or_Order === ord.Name; });
+        if (!scribeInput.value.trim()) {
+          scribeInput.value = person ? (person.Name + ", " + person.Office_Or_Title) : ("Novice of the " + ord.Name);
+        }
+        titleInput.value = motifObj.title;
+        categorySelect.value = cat;
+        hourSelect.value = hr;
+        houseInput.value = ord.Name;
+        epigraphInput.value = antiphon;
+        if (!bodyInput.value.trim()) {
+          bodyInput.value =
+            "Observed during " + hr + " by the " + ord.Name + ", centered upon " + motifObj.motif +
+            ". Recorded in lampblack ink for review at Lauds by the Scriptorium of the Ash-Ink.";
+        }
+        xrefInput.value = "Rule of Hours; LC-001";
+        onFieldChange();
+        S.showToast("Scriptorium Seed Drawn", "Seeded " + S.formatCategoryLabel(cat) + " for " + hr + ".", "info");
+      });
+
+      function openDrawer(entry) {
+        latestEntry = entry;
+        drawerId.textContent = entry.lore_id;
+        jsonPreview.textContent = JSON.stringify(entry, null, 2);
+        viewAnthologyBtn.href = "./index.html#anthology/" + encodeURIComponent(entry.lore_id);
+        drawer.classList.add("is-open");
+      }
+
+      form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const entry = buildEntry();
+        const missing = validateEntry(entry);
+
+        if (missing.length) {
+          const msg = "Please complete required fields: " + missing.join(", ") + ".";
+          S.showBanner("Incomplete Parchment", msg, "error");
+          S.showToast("Validation Required", msg, "error");
+          return;
+        }
+
+        submitBtn.disabled = true;
+        const hadWebhook = Boolean(S.getConfiguredWebhookUrl());
+        if (hadWebhook) {
+          S.showBanner("Dispatching to Synod Intake", "Sending " + entry.title + " to Google Sheets...", "info");
+        }
+
+        try {
+          const result = await S.submitLoreEntry(entry, hpInput.value);
+          latestEntry = result.entry;
+          openDrawer(result.entry);
+          renderLivePreview();
+          try {
+            localStorage.removeItem(DRAFT_KEY);
+          } catch (err) {
+            /* ignore */
+          }
+          draftPill.textContent = "Dispatched (" + result.entry.lore_id + ")";
+
+          if (result.mode === "remote") {
+            S.showBanner(
+              "Parchment Inscribed (" + result.entry.lore_id + ")",
+              "Recorded in Google Sheets (Lore_Submissions) and staged for immediate reading in the Anthology.",
+              "success"
+            );
+            S.showToast("Lore Dispatched", result.entry.lore_id + " saved to Google Sheets.", "success");
+          } else {
+            S.showBanner(
+              "Parchment Staged (" + result.entry.lore_id + ")",
+              "Staged in your browser archive for immediate reading in index.html, and compiled below for JSON export.",
+              "success"
+            );
+            S.showToast("Entry Staged", result.entry.lore_id + " ready in Anthology & JSON drawer.", "success");
+          }
+        } catch (err) {
+          const staged = S.stageEntryLocally(entry);
+          openDrawer(staged);
+          S.showBanner(
+            "Webhook Delivery Notice",
+            "Could not reach the Apps Script endpoint (" + err.message + "). Your entry has been staged locally for Anthology preview and compiled below for manual JSON archival.",
+            "error"
+          );
+          S.showToast("Staged Offline Fallback", staged.lore_id + " preserved locally.", "error");
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+
+      document.getElementById("copy-json-btn").addEventListener("click", function () {
+        if (!latestEntry) return;
+        const payload = JSON.stringify(latestEntry, null, 2);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(payload).then(
+            function () {
+              S.showToast("JSON Copied", latestEntry.lore_id + " copied to clipboard.", "success");
+            },
+            function () {
+              S.showBanner("Clipboard Unavailable", "Select and copy the JSON directly from the preview block.", "info");
+            }
+          );
+        } else {
+          S.showBanner("Clipboard Unavailable", "Select and copy the JSON directly from the preview block.", "info");
+        }
+      });
+
+      document.getElementById("download-json-btn").addEventListener("click", function () {
+        if (!latestEntry) return;
+        const blob = new Blob([JSON.stringify(latestEntry, null, 2) + "\n"], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = latestEntry.lore_id.toLowerCase() + ".json";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        S.showToast("JSON Downloaded", "Saved " + link.download + ".", "success");
+      });
+
+      document.getElementById("reset-btn").addEventListener("click", function () {
+        form.reset();
+        latestEntry = null;
+        drawer.classList.remove("is-open");
+        S.dismissBanner();
+        try {
+          localStorage.removeItem(DRAFT_KEY);
+        } catch (err) {
+          /* ignore */
+        }
+        draftPill.textContent = "Fresh Parchment";
+        onFieldChange();
+        S.showToast("Parchment Cleared", "Intake fields reset for a fresh entry.", "info");
+      });
+
+      S.onDataChanged(function () {
+        renderConnectionHint();
+        renderXrefChips();
+        renderLivePreview();
+      });
+
+      populateHousesDatalist();
+      restoreDraft();
+      renderConnectionHint();
+      onFieldChange();
+      S.fetchRemoteLore(true);
+    })();
+  </script>
+</body>
+</html>

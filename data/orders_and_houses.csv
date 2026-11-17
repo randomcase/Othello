@@ -1,0 +1,6 @@
+Order_ID,Name,Role_In_Commune,Canonical_Hour,Cloister_Seat,Governing_Vow,Liturgical_Symbol,Standing
+ORD-01,Choir of the First Watch,Custodians of nocturnal psalmody and fire-beacons,Vigils,North Belfry & Watch-Gallery,Vow of Unbroken Breath,Twin Bronze Tuning Forks,Canonized
+ORD-02,House of the Common Table,Stewards of granaries refectories salt-stores and labor rotation,Sext,West Refectory & Stone Mill,Vow of Equal Measure,Unleavened Loaf & Iron Spoon,Canonized
+ORD-03,Scriptorium of the Ash-Ink,Chroniclers illuminators and judges of submitted lore,Lauds,Lower Scriptorium Vault,Vow of Unaltered Record,Split Reed & Lampblack Vessel,Canonized
+ORD-04,Order of Bell-Founders,Smelters acousticians and keepers of liturgical bronze,Vespers,Basalt Foundry Yard,Vow of Tempered Resonance,Cracked Cinder-Bell,Canonized
+ORD-05,Hermits of the Sealed Marginalia,Collectors of disputed apocrypha and penitential glosses,Compline,Outer Reed-Cells,Vow of Patient Silence,Wax-Sealed Codex,Tolerated_Autonomy

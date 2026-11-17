@@ -1,0 +1,14 @@
+{
+  "folders": [
+    {
+      "name": "Othello — Venetian & Royal Scriptorium",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/.gdocs_sync": true
+    }
+  }
+}
